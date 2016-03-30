@@ -39,7 +39,7 @@
     <string name="login_success_reloading">Login successful: reloading the comments to get proper upvote links.</string>
     <string name="click_on_comments">Click on comments to read the related article</string>
     <string name="click_on_article">Click on article to read the related comments</string>
-    
+
     <!-- Error messages -->
     <string name="error_login_device_offline">Your device has no network connection at the moment.</string>
     <string name="error_unknown_error">An unknown error occurred.</string>
@@ -53,4 +53,6 @@
     <string name="crashlytics_pref">Share Anonymous Reports</string>
     <string name="crashlytics_off">No anonymous usage statistics and reports are shared</string>
     <string name="crashlytics_on">You are sharing anonymous usage statistics and crash reports. Thank You!</string>
+    <string name="favorites">Favorites</string>
+    <string name="add_to_favorites">Add to Favorites</string>
 </resources>

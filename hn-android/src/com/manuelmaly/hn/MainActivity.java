@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.DataSetObserver;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -204,10 +205,13 @@ public class MainActivity extends BaseListActivity implements
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         case R.id.menu_about:
-            startActivity(new Intent(MainActivity.this, AboutActivity_.class));
+            startActivity(new Intent(MainActivity.this, AboutActivity.class));
             return true;
         case R.id.menu_refresh:
             startFeedLoading();
+            return true;
+        case R.id.menu_favorites:
+            startActivity(new Intent(MainActivity.this, FavoritesActivity.class));
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -570,7 +574,7 @@ public class MainActivity extends BaseListActivity implements
 
         private void startCommentActivity(int position){
             Intent i = new Intent(MainActivity.this,
-                    CommentsActivity_.class);
+                    CommentsActivity.class);
             i.putExtra(CommentsActivity.EXTRA_HNPOST,
                     getItem(position));
             startActivity(i);
@@ -605,7 +609,8 @@ public class MainActivity extends BaseListActivity implements
                     getString(R.string.pref_htmlprovider_google),
                     getString(R.string.pref_htmlprovider_instapaper),
                     getString(R.string.external_browser),
-                    getString(R.string.share_article_url)));
+                    getString(R.string.share_article_url),
+                    getString(R.string.add_to_favorites)));
         }
 
         @Override
@@ -704,6 +709,9 @@ public class MainActivity extends BaseListActivity implements
             case 6:
                 shareUrl(mPost, MainActivity.this);
                 break;
+            case 7:
+                addToFavorites(mPost);
+                break;
             default:
                 break;
             }
@@ -723,7 +731,7 @@ public class MainActivity extends BaseListActivity implements
 
     public static void openPostInApp(HNPost post, String overrideHtmlProvider,
             Activity a) {
-        Intent i = new Intent(a, ArticleReaderActivity_.class);
+        Intent i = new Intent(a, ArticleReaderActivity.class);
         i.putExtra(ArticleReaderActivity.EXTRA_HNPOST, post);
         if (overrideHtmlProvider != null) {
             i.putExtra(ArticleReaderActivity.EXTRA_HTMLPROVIDER_OVERRIDE,
@@ -738,6 +746,10 @@ public class MainActivity extends BaseListActivity implements
       shareIntent.putExtra(Intent.EXTRA_SUBJECT, post.getTitle());
       shareIntent.putExtra(Intent.EXTRA_TEXT, post.getURL());
       a.startActivity(Intent.createChooser(shareIntent, a.getString(R.string.share_article_url)));
+    }
+
+    public void addToFavorites(HNPost post) {
+        post.addToFavorites(this);
     }
 
     private void setShowRefreshing(boolean showRefreshing) {

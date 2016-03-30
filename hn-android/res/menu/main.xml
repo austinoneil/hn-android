@@ -13,6 +13,10 @@
         android:icon="@drawable/refresh"
         hn:showAsAction="never" />
 
+    <item android:id="@+id/menu_favorites"
+        android:title="@string/favorites"
+        hn:showAsAction="never" />
+
     <item android:id="@+id/menu_about"
         android:title="@string/about"
         android:icon="@drawable/refresh"

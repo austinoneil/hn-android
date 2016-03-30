@@ -1,10 +1,25 @@
 package com.manuelmaly.hn.model;
 
+import android.content.ContextWrapper;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.manuelmaly.hn.database.HackerNewsDatabase;
+import com.manuelmaly.hn.database.ParameterAndData;
+import com.manuelmaly.hn.database.SqlParameter;
+import com.manuelmaly.hn.database.SqlParameterType;
+
+import java.io.File;
 import java.io.Serializable;
 
 public class HNPost implements Serializable {
-    
+
     private static final long serialVersionUID = -6764758363164898276L;
+    private static final String ID = "id";
+    private static final String URL = "url";
+    private static final String TITLE = "title";
+    private static final String AUTHOR = "author";
     private String mURL;
     private String mTitle;
     private String mAuthor;
@@ -13,7 +28,7 @@ public class HNPost implements Serializable {
     private String mURLDomain;
     private String mPostID; // as found in link to comments
     private String mUpvoteURL;
-    
+
     public HNPost(String url, String title, String urlDomain, String author, String postID, int commentsCount, int points, String upvoteURL) {
         super();
         mURL = url;
@@ -96,7 +111,27 @@ public class HNPost implements Serializable {
             return false;
         return true;
     }
-    
-    
-    
+
+    private SqlParameter[] parameters() {
+        return new SqlParameter[]{
+                new SqlParameter(ID, SqlParameterType.INTEGER),
+                new SqlParameter(URL, SqlParameterType.VARCHAR),
+                new SqlParameter(TITLE, SqlParameterType.VARCHAR),
+                new SqlParameter(AUTHOR, SqlParameterType.VARCHAR)
+        };
+
+    }
+
+    public void addToFavorites(ContextWrapper contextWrapper) {
+        try {
+            String path = contextWrapper.getFilesDir() + "/Favorites.db3";
+            SQLiteDatabase myDatabase = SQLiteDatabase.openOrCreateDatabase(path, null);
+            myDatabase.execSQL("CREATE TABLE IF NOT EXISTS Favorites (id VARCHAR PRIMARY KEY, url VARCHAR, title VARCHAR, author VARCHAR)");
+            myDatabase.rawQuery("INSERT INTO Favorites (id, url, title, author) VALUES (?, ?, ?, ?)", new String[]{mPostID, mURL, mTitle, mAuthor});
+            myDatabase.close();
+        }
+        catch (Exception e) {
+            Log.e("Exception", e.getMessage());
+        }
+    }
 }
