@@ -1,6 +1,12 @@
 package com.manuelmaly.hn.model;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class HNPost implements Serializable {
     
@@ -97,6 +103,25 @@ public class HNPost implements Serializable {
         return true;
     }
     
-    
-    
+    public void savePostToFavorites(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("this", Context.MODE_PRIVATE);
+        if (preferences != null) {
+            String favoritesJson = preferences.getString("favorites", "[]");
+            Gson gson = new Gson();
+            List<HNPost> favoritesList = gson.fromJson(favoritesJson, List.class);
+            if(!this.isInList(favoritesList)) {
+                favoritesList.add(this);
+            }
+            String updatedFavoritesJson = gson.toJson(favoritesList);
+            preferences.edit().putString("favorites", updatedFavoritesJson).commit();
+        }
+    }
+    private boolean isInList(List<HNPost> list) {
+        for (HNPost post:list) {
+            if(mPostID.equals(post.getPostID())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

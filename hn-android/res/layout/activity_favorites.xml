@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/favorites_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:contentDescription="@string/favorites">
+
+    <ListView
+        android:id="@+id/favorites_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/peach"
+        android:cacheColorHint="@color/peach"
+        android:divider="#f0dfce"
+        android:dividerHeight="1dp"
+        android:fadingEdge="none"
+        />
+
+</LinearLayout>
